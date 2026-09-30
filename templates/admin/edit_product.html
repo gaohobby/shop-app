@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}编辑商品{% endblock %}
+
+{% block content %}
+  <h1>编辑商品</h1>
+  <form method="post">
+     <p>商品名：<input type="text" name="name" value="{{ product.name }}"></p>
+     <p>价格：<input type="text" name="price" value="{{ product.price }}"></p>
+     <p>库存：<input type="text" name="stock" value="{{ product.stock }}"></p>
+    <button type="submit">保存</button>
+  </form>
+
+
+  <p><a href="{{ url_for('admin.index') }}">返回</a></p>
+{% endblock %}

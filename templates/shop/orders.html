@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}我的订单{% endblock %}
+
+{% block content %}
+  <h1>我的订单</h1>
+
+  {% if orders %}
+    {% for order in orders %}
+     <div class="card">
+       <h3>订单 #{{ order.id }}</h3>
+       <small>{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</small>
+         <p>状态：<strong>{{ order.status }}</strong></p>
+       <ul>
+
+        {% for item in order.items %}
+          <li>
+            {{ item.product.name }}
+            × {{ item.quantity }}
+            = ¥{{ "%.2f"|format(item.price * item.quantity) }}
+          </li>
+        {% endfor %}
+       </ul>
+
+       <strong>总价：¥{{ "%.2f"|format(order.total) }}</strong>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>还没有订单</p>
+    {% endif %}
+
+    <p><a href="{{ url_for('shop.index') }}">继续购物</a></p>
+{% endblock %}

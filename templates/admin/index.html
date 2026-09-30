@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}管理后台{% endblock %}
+
+{% block content %}
+  <h1>管理后台</h1>
+
+  <p>
+      <a href="{{ url_for('admin.new_product') }}">添加商品</a>
+      <a href="{{ url_for('admin.orders') }}">所有订单</a>
+  </p>
+
+  {% if products %}
+    {% for p in products %}
+      <div class="card">
+        <strong>{{ p.name }}</strong>
+                   — ¥{{ p.price }}
+                — 库存 {{ p.stock }}
+          <a href="{{ url_for('admin.edit_product', product_id=p.id) }}">编辑</a>
+
+                <form method="post" action="{{ url_for('admin.delete_product', product_id=p.id) }}" style="display:inline;">
+                    <button type="submit" class="danger" onclick="return confirm('确定删除？')">删除</button>
+                </form>
+      </div>
+{% endfor %}
+    {% else %}
+        <p>还没有商品</p>
+    {% endif %}
+{% endblock %}

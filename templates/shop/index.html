@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}商城首页{% endblock %}
+
+{% block content %}
+    <h1>商品列表</h1>
+ <!-- 搜索框 -->
+    <form method="get" style="margin-bottom:20px;">
+        <input type="text" name="q" value="{{ keyword }}" placeholder="搜索商品...">
+        <button type="submit">搜索</button>
+    </form>
+
+    {% if products %}
+        {% for p in products %}
+            <div class="card">
+                <strong>{{ p.name }}</strong>
+                — ¥{{ p.price }}
+                — 库存 {{ p.stock }}
+
+                {% if p.stock > 0 %}
+                    <form method="post" action="{{ url_for('shop.add_to_cart', product_id=p.id) }}" style="display:inline;">
+                        <button type="submit">加入购物车</button>
+                    </form>
+                {% else %}
+                    <span style="color:red;">已售罄</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+<!-- 分页 -->
+        {% if pagination.pages > 1 %}
+            <div style="text-align:center; margin-top:20px;">
+                {% if pagination.has_prev %}
+                    <a href="{{ url_for('shop.index', page=pagination.prev_num, q=keyword) }}">← 上一页</a>
+                {% endif %}
+
+                {% for p in pagination.iter_pages() %}
+                    {% if p %}
+                        {% if p == pagination.page %}
+                            <strong>{{ p }}</strong>
+                        {% else %}
+                            <a href="{{ url_for('shop.index', page=p, q=keyword) }}">{{ p }}</a>
+                        {% endif %}
+                    {% else %}
+                        ...
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.has_next %}
+                    <a href="{{ url_for('shop.index', page=pagination.next_num, q=keyword) }}">下一页 →</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+
+
+{% else %}
+        <p>还没有商品</p>
+    {% endif %}
+{% endblock %}
